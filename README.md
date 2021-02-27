@@ -1,0 +1,2 @@
+# lofmi
+Logic function minimizer
