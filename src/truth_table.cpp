@@ -81,4 +81,14 @@ namespace Lofmi
     {
         return y;
     }
+
+    NormalForm TruthTable::buildCNF() const
+    {
+        return NormalForm(x, y, OperType::Conjunctive);
+    }
+
+    NormalForm TruthTable::buildDNF() const
+    {
+        return NormalForm(x, y, OperType::Disjunctive);
+    }
 } // namespace Lofmi

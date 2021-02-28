@@ -9,6 +9,8 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(SOURCE
     main.cpp
     ${SOURCE_DIR}/truth_table.cpp
+    ${SOURCE_DIR}/elem_oper.cpp
+    ${SOURCE_DIR}/normal_form.cpp
 )
 
 add_executable(main ${SOURCE})

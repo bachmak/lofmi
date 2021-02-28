@@ -1,8 +1,7 @@
 #pragma once
 
 #include "lofmi/common.h"
-
-#include <vector>
+#include "lofmi/normal_form.h"
 
 namespace Lofmi
 {
@@ -17,6 +16,8 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const TruthTable& tt);
     const std::vector<Bitset>& getX() const;
     const Bitset& getY() const;
+    NormalForm buildDNF() const;
+    NormalForm buildCNF() const;
 
 private:
     std::vector<Bitset> x;
