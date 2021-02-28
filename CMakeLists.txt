@@ -1,5 +1,24 @@
 cmake_minimum_required(VERSION 3.20)
-
 project(lofmi)
 
-add_executable(main main.cpp)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(SOURCE
+    main.cpp
+    ${SOURCE_DIR}/truth_table.cpp
+)
+
+add_executable(main ${SOURCE})
+
+find_package(Boost REQUIRED)
+
+if(${Boost_FOUND})
+    target_include_directories(main PUBLIC ${Boost_INCLUDE_DIRS})
+endif()
+
+target_include_directories(
+    main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
