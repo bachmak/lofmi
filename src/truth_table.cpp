@@ -71,4 +71,14 @@ namespace Lofmi
         
         return os;
     }
+
+    const std::vector<Bitset>& TruthTable::getX() const
+    {
+        return x;
+    }
+
+    const Bitset& TruthTable::getY() const
+    {
+        return y;
+    }
 } // namespace Lofmi
