@@ -10,7 +10,8 @@ class GrayCode
 public:
     GrayCode(size_t gray_seq_number);
     friend std::ostream& operator<<(std::ostream& os, const GrayCode& gc);
-
+    const Bitset& getCode() const;
+    
 private:
     Bitset bits;
     

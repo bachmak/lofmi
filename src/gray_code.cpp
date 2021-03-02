@@ -31,4 +31,8 @@ std::ostream& operator<<(std::ostream& os, const GrayCode& gc)
     return os;
 }
 
+const Bitset& GrayCode::getCode() const
+{
+    return bits;
+}
 } // namespace Lofmi
