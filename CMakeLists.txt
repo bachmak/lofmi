@@ -11,6 +11,7 @@ set(SOURCE
     ${SOURCE_DIR}/truth_table.cpp
     ${SOURCE_DIR}/elem_oper.cpp
     ${SOURCE_DIR}/normal_form.cpp
+    ${SOURCE_DIR}/gray_code.cpp
 )
 
 add_executable(main ${SOURCE})

@@ -16,7 +16,19 @@ namespace Lofmi
     template <typename T>
     inline int NextPowerOf2(T val)
     {
-        return std::pow(2, std::ceil(std::log2(val)));  
+        return static_cast<int>(std::pow(2, std::ceil(std::log2(val))));  
+    }
+
+    template <typename T>
+    inline size_t BitsetSizeByIndex(T val)
+    {
+        return static_cast<size_t>(std::log2(NextPowerOf2(val + 1)));
+    }
+
+    template <typename T>
+    inline int Pow2(T val)
+    {
+        return static_cast<int>(std::pow(2, val));
     }
 
 } // namespace Lofmi
