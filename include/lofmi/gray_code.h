@@ -8,6 +8,7 @@ namespace Lofmi
 class GrayCode
 {
 public:
+    GrayCode() = default;
     GrayCode(size_t gray_seq_number);
     friend std::ostream& operator<<(std::ostream& os, const GrayCode& gc);
     const Bitset& getCode() const;
@@ -15,6 +16,6 @@ public:
 private:
     Bitset bits;
     
-    static bool GrayBit(int gray_seq_num, int bit_pos);
+    bool GrayBit(int gray_seq_num, int bit_pos);
 };
 } // namespace Lofmi

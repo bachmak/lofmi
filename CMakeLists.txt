@@ -12,6 +12,7 @@ set(SOURCE
     ${SOURCE_DIR}/elem_oper.cpp
     ${SOURCE_DIR}/normal_form.cpp
     ${SOURCE_DIR}/gray_code.cpp
+    ${SOURCE_DIR}/karnaugh_map.cpp
 )
 
 add_executable(main ${SOURCE})
@@ -23,5 +24,6 @@ if(${Boost_FOUND})
 endif()
 
 target_include_directories(
-    main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+    main PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

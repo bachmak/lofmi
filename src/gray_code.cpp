@@ -24,9 +24,17 @@ GrayCode::GrayCode(size_t gray_seq_num) :
 
 std::ostream& operator<<(std::ostream& os, const GrayCode& gc)
 {
+    if (gc.bits.empty())
+    {
+        return os << 0;
+    }
+    int width = os.width() - gc.bits.size();
+    width = width < 0 ? 0 : width;
+    os << std::setw(width);
+    
     for (int i = gc.bits.size() - 1; i >= 0; i--)
     {
-        os << gc.bits[i];
+        os << std::setw(os.width() + 1) << gc.bits[i];
     }
     return os;
 }
