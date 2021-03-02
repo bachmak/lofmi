@@ -1,5 +1,7 @@
 #pragma once
 
+#include "lofmi/common.h"
+
 #include <utility>
 #include <cmath>
 
@@ -29,6 +31,11 @@ namespace Lofmi
     inline int Pow2(T val)
     {
         return static_cast<int>(std::pow(2, val));
+    }
+
+    inline bool operator<(const Bitset& lhs, const Bitset& rhs)
+    {
+        return lhs.to_ulong() < rhs.to_ulong();
     }
 
 } // namespace Lofmi

@@ -23,6 +23,7 @@ namespace Lofmi
         for (size_t i = 0; i < x.size(); i++)
         {
             x[i] = Bitset(power_of_2 - 1, i);
+            table.insert({ x[i], y[i] });
         }
     }
 
@@ -80,6 +81,11 @@ namespace Lofmi
     const Bitset& TruthTable::getY() const
     {
         return y;
+    }
+
+    bool TruthTable::getValue(const Bitset& x) const
+    {
+        return table.at(x);
     }
 
     NormalForm TruthTable::buildCNF() const
