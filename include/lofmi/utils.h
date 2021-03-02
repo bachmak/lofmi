@@ -38,4 +38,16 @@ namespace Lofmi
         return lhs.to_ulong() < rhs.to_ulong();
     }
 
+    inline Bitset Concatenate(const Bitset& lhs, const Bitset& rhs)
+    {
+        Bitset result = rhs;
+        result.reserve(lhs.size() + rhs.size());
+        for (size_t i = 0; i < lhs.size(); i++)
+        {
+            result.push_back(lhs[i]);
+        }
+        
+        return result;
+    }
+
 } // namespace Lofmi
