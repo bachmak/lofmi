@@ -38,6 +38,25 @@ namespace Lofmi
         return lhs.to_ulong() < rhs.to_ulong();
     }
 
+    inline std::ostream& operator<<(std::ostream& os, const Bitset& b)
+    {
+        if (b.empty())
+        {
+            return os << 0;
+        }
+
+        int width = os.width() - b.size();
+        width = width < 0 ? 0 : width;
+        os << std::setw(width);
+        
+        for (int i = b.size() - 1; i >= 0; i--)
+        {
+            os << std::setw(os.width() + 1) << b[i];
+        }
+        
+        return os;
+    }
+
     inline Bitset Concatenate(const Bitset& lhs, const Bitset& rhs)
     {
         Bitset result = rhs;

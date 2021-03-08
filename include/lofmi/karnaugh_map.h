@@ -18,11 +18,10 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const KarnaughMap& km);
     
 private:
-    std::vector<GrayCode> rows;
-    std::vector<GrayCode> cols;
+    std::vector<Bitset> rows;
+    std::vector<Bitset> cols;
     BoolMatrix map;
 
-    void FillGraySequence(std::vector<GrayCode>& sequence);
-    void FillMap(const TruthTable& tt);
+    BoolMatrix TruthTableToKarnaughMap(const TruthTable& tt) const;
 };
 } // namespace Lofmi

@@ -14,13 +14,9 @@ KarnaughMap::KarnaughMap(const TruthTable& tt)
     size_t cols_count = Pow2(arg_count / 2);
     size_t rows_count = Pow2(arg_count - arg_count / 2);
     
-    rows = std::vector<GrayCode>(rows_count);
-    cols = std::vector<GrayCode>(cols_count);
-    map = BoolMatrix(rows.size(), std::vector<bool>(cols.size()));
-
-    FillGraySequence(rows);
-    FillGraySequence(cols);
-    FillMap(tt);
+    rows = GrayCode::GrayCodeSequence(rows_count);
+    cols = GrayCode::GrayCodeSequence(cols_count);
+    map = TruthTableToKarnaughMap(tt);
 }
 
 std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
@@ -30,8 +26,8 @@ std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
         return os;
     }
 
-    size_t row_bits_size = km.rows.back().getCode().size();
-    size_t col_bits_size = km.cols.back().getCode().size();
+    size_t row_bits_size = km.rows.back().size();
+    size_t col_bits_size = km.cols.back().size();
 
     os << "  " << std::setfill(' ') << std::setw(row_bits_size) << " " << "  ";
 
@@ -59,32 +55,28 @@ std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
     return os;
 }
 
-void KarnaughMap::FillGraySequence(std::vector<GrayCode>& sequence)
+BoolMatrix KarnaughMap::TruthTableToKarnaughMap(const TruthTable& tt) const
 {
-    for (size_t i = 0; i < sequence.size(); i++)
-    {
-        sequence[i] = GrayCode(i);
-    }
-}
+    BoolMatrix result(rows.size(), std::vector<bool>(cols.size()));
 
-void KarnaughMap::FillMap(const TruthTable& tt)
-{
-    size_t row_count = rows.back().getCode().size();
-    size_t col_count = cols.back().getCode().size();
+    size_t row_count = rows.back().size();
+    size_t col_count = cols.back().size();
 
     for (size_t i = 0; i < rows.size(); i++)
     {
         for (size_t j = 0; j < cols.size(); j++)
         {
-            Bitset row_bitset = rows[i].getCode();
-            Bitset col_bitset = cols[j].getCode();
+            Bitset row_bitset = rows[i];
+            Bitset col_bitset = cols[j];
 
             row_bitset.resize(row_count, false);
             col_bitset.resize(col_count, false);
             auto conc_bitset = Concatenate(row_bitset, col_bitset);
-            map[i][j] = tt.getValue(conc_bitset);
+            result[i][j] = tt.getValue(conc_bitset);
         }
     }
+
+    return result;
 }
 
 } // namespace Lofmi
