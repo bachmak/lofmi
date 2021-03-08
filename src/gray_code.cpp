@@ -3,7 +3,7 @@
 namespace Lofmi
 {
 // метод определения значения бита в коде Грея по последовательному номеру кода и позиции бита
-bool GrayCode::GrayBit(int gray_seq_num, int bit_pos)
+bool GrayCode::GrayCodeBit(int gray_seq_num, int bit_pos)
 {
     double lhs = std::abs(
         gray_seq_num % Pow2(2 + bit_pos) - (Pow2(2 + bit_pos) - 1) / 2.0
@@ -14,34 +14,27 @@ bool GrayCode::GrayBit(int gray_seq_num, int bit_pos)
     return lhs <= rhs;
 }
 
-GrayCode::GrayCode(size_t gray_seq_num) : 
-    bits{ Bitset(BitsetSizeByIndex(gray_seq_num)) }
+Bitset GrayCode::GrayCodeValue(size_t dec_seq_number)
 {
-    for (size_t i = 0; i < bits.size(); i++)
-    {
-        bits[i] = GrayBit(gray_seq_num, i);
-    }
-}
-
-std::ostream& operator<<(std::ostream& os, const GrayCode& gc)
-{
-    if (gc.bits.empty())
-    {
-        return os << 0;
-    }
-    int width = os.width() - gc.bits.size();
-    width = width < 0 ? 0 : width;
-    os << std::setw(width);
+    Bitset result(BitsetSizeByIndex(dec_seq_number));
     
-    for (int i = gc.bits.size() - 1; i >= 0; i--)
+    for (size_t i = 0; i < result.size(); i++)
     {
-        os << std::setw(os.width() + 1) << gc.bits[i];
+        result[i] = GrayCodeBit(dec_seq_number, i);
     }
-    return os;
+
+    return result;
 }
 
-const Bitset& GrayCode::getCode() const
+std::vector<Bitset> GrayCode::GrayCodeSequence(size_t seq_size)
 {
-    return bits;
+    std::vector<Bitset> result(seq_size);
+
+    for (size_t i = 0; i < result.size(); i++)
+    {
+        result[i] = GrayCodeValue(i);
+    }
+    
+    return result;
 }
 } // namespace Lofmi

@@ -6,19 +6,17 @@
 namespace Lofmi
 {
 /*
-Класс для представления кодовых комбинаций, составляемых по коду Грея.
+Класс со статическими методами для построения чисел и последовательностей чисел по коду Грея
 */
+
 class GrayCode
 {
 public:
-    GrayCode() = default;
-    GrayCode(size_t gray_seq_number);                                                   // конструктор по десятичному числу
-    friend std::ostream& operator<<(std::ostream& os, const GrayCode& gc);
-    const Bitset& getCode() const;
-    
+    GrayCode() = delete;
+    static Bitset GrayCodeValue(size_t dec_seq_number);
+    static std::vector<Bitset> GrayCodeSequence(size_t seq_size);
+
 private:
-    Bitset bits;
-    
-    bool GrayBit(int gray_seq_num, int bit_pos);                                        // метод определения значения бита в коде Грея по последовательному номеру кода и позиции бита 
+    static bool GrayCodeBit(int gray_seq_num, int bit_pos);                                        // метод определения значения бита в коде Грея по последовательному номеру кода и позиции бита 
 };
 } // namespace Lofmi
