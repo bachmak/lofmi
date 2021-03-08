@@ -8,6 +8,11 @@ namespace Lofmi
 {
 class KarnaughMap
 {
+/*
+Класс для представления минимизирующей карты Карно.
+Карта Карно — графический способ представления булевых функций с целью их удобной и наглядной ручной минимизации.
+Переменные по строкам и столбцам в карте Карно упорядочиваются по коду Грея.
+*/
 public:
     KarnaughMap(const TruthTable& tt);
     friend std::ostream& operator<<(std::ostream& os, const KarnaughMap& km);
@@ -20,5 +25,4 @@ private:
     void FillGraySequence(std::vector<GrayCode>& sequence);
     void FillMap(const TruthTable& tt);
 };
-
 } // namespace Lofmi

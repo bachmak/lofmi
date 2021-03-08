@@ -2,6 +2,7 @@
 
 namespace Lofmi
 {
+// метод определения значения бита в коде Грея по последовательному номеру кода и позиции бита
 bool GrayCode::GrayBit(int gray_seq_num, int bit_pos)
 {
     double lhs = std::abs(

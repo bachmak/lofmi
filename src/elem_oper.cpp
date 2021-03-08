@@ -4,9 +4,9 @@ namespace Lofmi
 {
     ElemOper::ElemOper(Bitset bitset, OperType type)
     {
-        switch (type)
-        {
-        case OperType::Conjunctive:
+        switch (type)                                                                   // в зависимости от типа операции 
+        {                                                                               // задаем разделитель (для вывода)
+        case OperType::Conjunctive:                                                     // если конъюнкция, инвертируем значения
             divider = " V ";
             bitset.flip();
             break;
@@ -22,7 +22,7 @@ namespace Lofmi
     {
         os << '(';
 
-        for (size_t i = 0; i < eo.bitset.size(); i++)
+        for (size_t i = 0; i < eo.bitset.size(); i++)                                   // выводим в формате. например: (x0 V ~x1 V x2)
         {
             os << (i == 0 ? "" : eo.divider)
                << (eo.bitset[i] ? "" : "~")
