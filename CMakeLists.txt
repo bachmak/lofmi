@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(lofmi)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -13,6 +13,7 @@ set(SOURCE
     ${SOURCE_DIR}/normal_form.cpp
     ${SOURCE_DIR}/gray_code.cpp
     ${SOURCE_DIR}/karnaugh_map.cpp
+    ${SOURCE_DIR}/karnaugh_minimizer.cpp
 )
 
 add_executable(main ${SOURCE})

@@ -19,6 +19,11 @@ KarnaughMap::KarnaughMap(const TruthTable& tt)
     map = TruthTableToKarnaughMap(tt);
 }
 
+const BoolMatrix& KarnaughMap::getMatrix() const
+{
+    return map;
+}
+
 std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
 {
     if (km.rows.empty() || km.cols.empty())
@@ -78,5 +83,4 @@ BoolMatrix KarnaughMap::TruthTableToKarnaughMap(const TruthTable& tt) const
 
     return result;
 }
-
 } // namespace Lofmi
