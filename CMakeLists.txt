@@ -14,6 +14,7 @@ set(SOURCE
     ${SOURCE_DIR}/gray_code.cpp
     ${SOURCE_DIR}/karnaugh_map.cpp
     ${SOURCE_DIR}/karnaugh_minimizer.cpp
+    ${SOURCE_DIR}/karnaugh_area.cpp
 )
 
 add_executable(main ${SOURCE})
