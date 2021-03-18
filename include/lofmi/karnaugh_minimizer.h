@@ -11,39 +11,42 @@ std::vector<KarnaughMapArea> findAreas(const KarnaughMap& map);
 
 namespace Minimize
 {
-    using Map = KarnaughMap;
-    using Area = KarnaughMapArea;
-    using Point = KarnaughMapPoint;
-    using AreasPtr = std::unique_ptr<std::vector<Area>>;
+using Map = KarnaughMap;
+using Area = KarnaughMapArea;
+using Point = KarnaughMapPoint;
+using AreasPtr = std::unique_ptr<std::vector<Area>>;
 
-    // TODO: remove extra operators for debug   
-    inline std::ostream& operator<<(std::ostream& os, const AreasPtr& areas)
+// TODO: remove extra operators for debug   
+inline std::ostream& operator<<(std::ostream& os, const AreasPtr& areas)
+{
+    for (const auto& area : *areas)
     {
-        for (const auto& area : *areas)
-        {
-            os << area << std::endl;
-        }
-
-        return os;
+        os << area << std::endl;
     }
 
-    enum class Direction
-    {
-        Right, Down
-    };
+    return os;
+}
 
-    AreasPtr findAllAreas(const Map& map);
+enum class Direction
+{
+    Right, Down
+};
 
-    AreasPtr removeOverlappingAreas(AreasPtr areas);
+AreasPtr findAllAreas(const Map& map);
 
-    AreasPtr findAreasFromPoint(const Map& map, Point point);
+AreasPtr removeOverlappingAreas(AreasPtr areas);
 
-    AreasPtr findAreasInDirectionAndUpdateLimit(
-        const Map& map, Point point, int xy_step, int& limit, Direction dir
-    );
+AreasPtr findAreasFromPoint(const Map& map, Point point);
 
-    AreasPtr moveInsert(AreasPtr src, AreasPtr dst);
-    std::pair<int, int> getXY(const Map& map);
+AreasPtr findAreasInDirectionAndUpdateLimit(
+    const Map& map, Point point, int xy_step, int& limit, Direction dir
+);
+
+void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas);
+
+AreasPtr moveInsert(AreasPtr src, AreasPtr dst);
+
+std::pair<int, int> getXY(const Map& map);
+
 } // namespace Minimize
-
 } // namespace Lofmi

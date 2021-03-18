@@ -127,32 +127,7 @@ AreasPtr removeOverlappingAreas(AreasPtr areas)
 
         for (Area& ref_area : *areas | has_same_area_size)
         {
-            for (int i = 0; i < ref_area.getAreaSize(); i++)
-            {    
-                auto differs_from_ref_area = std::views::filter(
-                    [&ref_area](const Area& a) { return &ref_area != &a; }
-                );
-
-                auto non_zero_area_size = std::views::filter(
-                    [](const Area& a) { return a.getAreaSize() != 0; }
-                );
-
-                for (Area& area : *areas | 
-                    differs_from_ref_area |
-                    non_zero_area_size)
-                {
-                    if (area.includesPoint(ref_area[i]))
-                    {
-                        ref_area.reset();
-                        break;
-                    }
-                }
-
-                if (ref_area.getAreaSize() == 0)
-                {
-                    break;
-                }
-            }
+            resetIfCoveredByOther(ref_area, areas);
         }
     }
 
@@ -163,6 +138,36 @@ AreasPtr removeOverlappingAreas(AreasPtr areas)
 
     areas->erase(non_zero_border, areas->end());
     return std::move(areas);
+}
+
+void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas)
+{
+    for (int i = 0; i < ref_area.getAreaSize(); i++)
+    {    
+        auto differs_from_ref_area = std::views::filter(
+            [&ref_area](const Area& a) { return &ref_area != &a; }
+        );
+
+        auto non_zero_area_size = std::views::filter(
+            [](const Area& a) { return a.getAreaSize() != 0; }
+        );
+
+        for (Area& area : *areas | 
+            differs_from_ref_area |
+            non_zero_area_size)
+        {
+            if (area.includesPoint(ref_area[i]))
+            {
+                ref_area.reset();
+                break;
+            }
+        }
+
+        if (ref_area.getAreaSize() == 0)
+        {
+            break;
+        }
+    }
 }
 
 AreasPtr moveInsert(AreasPtr src, AreasPtr dst)
