@@ -26,6 +26,16 @@ const BoolMatrix& Map::getMatrix() const
     return map;
 }
 
+const Bitset& Map::getCode(int x, int y) const
+{
+    if (x >= cols.size() || y >= rows.size() || x < 0 || y < 0)
+    {
+        throw std::out_of_range("Index is out of Karnaugh map");
+    }
+
+    return Concatenate(rows[y], cols[x]);
+}
+
 std::ostream& operator<<(std::ostream& os, const Map& km)
 {
     if (km.rows.empty() || km.cols.empty())
