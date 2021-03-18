@@ -1,22 +1,23 @@
-#include "lofmi/karnaugh_area.h"
+#include "lofmi/karnaugh/area.h"
 
 #include <stdexcept>
 #include <tuple>
 
 namespace Lofmi
 {
-
-bool KarnaughMapPoint::operator==(const KarnaughMapPoint& kmp) const
+namespace Karnaugh
+{
+bool MapPoint::operator==(const MapPoint& kmp) const
 {
     return x == kmp.x && y == kmp.y;
 }
 
-std::ostream& operator<<(std::ostream& os, const KarnaughMapPoint& kmp)
+std::ostream& operator<<(std::ostream& os, const MapPoint& kmp)
 {
     return os << '(' << kmp.x << ", " << kmp.y << ')';
 }
 
-KarnaughMapArea::KarnaughMapArea(const Map& m, Point lt, Point rb) :
+MapArea::MapArea(const Map& m, Point lt, Point rb) :
     left_top{ lt },
     right_bottom{ rb },
     map_height{ m.getMatrix().size() },
@@ -27,32 +28,32 @@ KarnaughMapArea::KarnaughMapArea(const Map& m, Point lt, Point rb) :
     updateSizes();
 }
 
-bool KarnaughMapArea::operator==(const Area& a) const
+bool MapArea::operator==(const Area& a) const
 {
     return std::tuple(left_top, right_bottom, map_height, map_width) ==
            std::tuple(a.left_top, a.right_bottom, a.map_height, a.map_width);
 }
 
-bool KarnaughMapArea::operator<(const Area& a) const
+bool MapArea::operator<(const Area& a) const
 {
     return area_size < a.area_size;
 }
 
-void KarnaughMapArea::setLeftTopPoint(Point lt)
+void MapArea::setLeftTopPoint(Point lt)
 {
     validatePoint(left_top);
     left_top = lt;
     updateSizes();
 }
 
-void KarnaughMapArea::setRightBottomPoint(Point rb)
+void MapArea::setRightBottomPoint(Point rb)
 {
     validatePoint(rb);
     right_bottom = rb;
     updateSizes();
 }
 
-void KarnaughMapArea::setHeight(int h)
+void MapArea::setHeight(int h)
 {
     if (h > map_height)
     {
@@ -63,7 +64,7 @@ void KarnaughMapArea::setHeight(int h)
     updateSizes();
 }
 
-void KarnaughMapArea::setWidth(int w)
+void MapArea::setWidth(int w)
 {
     if (w > map_width)
     {
@@ -74,28 +75,28 @@ void KarnaughMapArea::setWidth(int w)
     updateSizes();
 }
 
-void KarnaughMapArea::reset()
+void MapArea::reset()
 {
     left_top = { 0, 0 };
     right_bottom = { 0, 0 };
     height = width = area_size = 0;
 }
 
-int KarnaughMapArea::getAreaSize() const { return area_size; }
+int MapArea::getAreaSize() const { return area_size; }
 
-int KarnaughMapArea::getLeft() const { return left_top.x; }
+int MapArea::getLeft() const { return left_top.x; }
 
-int KarnaughMapArea::getTop() const { return left_top.y; }
+int MapArea::getTop() const { return left_top.y; }
 
-int KarnaughMapArea::getRight() const { return right_bottom.x; }
+int MapArea::getRight() const { return right_bottom.x; }
 
-int KarnaughMapArea::getBottom() const { return right_bottom.y; }
+int MapArea::getBottom() const { return right_bottom.y; }
 
-int KarnaughMapArea::getHeight() const { return height; }
+int MapArea::getHeight() const { return height; }
 
-int KarnaughMapArea::getWidth() const { return width; }
+int MapArea::getWidth() const { return width; }
 
-KarnaughMapPoint KarnaughMapArea::operator[](size_t idx) const
+MapPoint MapArea::operator[](size_t idx) const
 {
     if (idx > area_size)
     {
@@ -113,7 +114,7 @@ KarnaughMapPoint KarnaughMapArea::operator[](size_t idx) const
     return result;
 }
 
-bool KarnaughMapArea::includesPoint(Point p) const
+bool MapArea::includesPoint(Point p) const
 {
     return (
         includesPointAlongAxis(p.x, left_top.x, right_bottom.x, map_width) &&
@@ -121,18 +122,18 @@ bool KarnaughMapArea::includesPoint(Point p) const
     );
 }
 
-std::ostream& operator<<(std::ostream& os, const KarnaughMapArea& a)
+std::ostream& operator<<(std::ostream& os, const MapArea& a)
 {
     return os << a.left_top << " → " << a.right_bottom;
 }
 
-bool KarnaughMapArea::pointIsOutOfMap(Point p) const
+bool MapArea::pointIsOutOfMap(Point p) const
 {
     return p.x >= static_cast<int>(map_width) || 
            p.y >= static_cast<int>(map_height);
 }
 
-void KarnaughMapArea::validatePoint(Point p) const
+void MapArea::validatePoint(Point p) const
 {
     if (pointIsOutOfMap(p))
     {
@@ -140,9 +141,7 @@ void KarnaughMapArea::validatePoint(Point p) const
     }
 }
 
-int KarnaughMapArea::calculateDistance(
-    int first, int second, int max
-) const
+int MapArea::calculateDistance(int first, int second, int max) const
 {
     if (first < 0 || second < 0)
     {
@@ -156,14 +155,14 @@ int KarnaughMapArea::calculateDistance(
     return max - first + second + 1;
 }
 
-void KarnaughMapArea::updateSizes()
+void MapArea::updateSizes()
 {
     height = calculateDistance(left_top.y, right_bottom.y, map_height);
     width = calculateDistance(left_top.x, right_bottom.x, map_width);
     area_size = height * width;
 }
 
-bool KarnaughMapArea::includesPointAlongAxis(
+bool MapArea::includesPointAlongAxis(
     int point_coord, int area_first_coord, int area_second_coord, int max
 ) const
 {
@@ -176,11 +175,9 @@ bool KarnaughMapArea::includesPointAlongAxis(
            point_coord <= area_second_coord;
 }
 
-bool KarnaughMapArea::crossesMapBorder(
-    int first_coord, int second_coord
-) const
+bool MapArea::crossesMapBorder(int first_coord, int second_coord) const
 {
     return first_coord > second_coord;
 }
-
+} // namespace Karnaugh
 } // namespace Lofmi

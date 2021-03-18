@@ -2,21 +2,24 @@
 
 #include "lofmi/common.h"
 #include "lofmi/utils.h"
-#include "lofmi/karnaugh_map.h"
-#include "lofmi/karnaugh_area.h"
+#include "lofmi/karnaugh/map.h"
+#include "lofmi/karnaugh/area.h"
 
 namespace Lofmi
 {
-std::vector<KarnaughMapArea> findAreas(const KarnaughMap& map);
-
-namespace Minimize
+namespace Karnaugh
 {
-using Map = KarnaughMap;
-using Area = KarnaughMapArea;
-using Point = KarnaughMapPoint;
+
+namespace Minimization
+{
+using Area = MapArea;
+using Point = MapPoint;
 using AreasPtr = std::unique_ptr<std::vector<Area>>;
 
 // TODO: remove extra operators for debug   
+
+std::vector<MapArea> findAreas(const Map& map);
+
 inline std::ostream& operator<<(std::ostream& os, const AreasPtr& areas)
 {
     for (const auto& area : *areas)
@@ -48,5 +51,6 @@ AreasPtr moveInsert(AreasPtr src, AreasPtr dst);
 
 std::pair<int, int> getXY(const Map& map);
 
+} // namespace Karnaugh
 } // namespace Minimize
 } // namespace Lofmi

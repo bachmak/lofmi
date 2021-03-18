@@ -1,20 +1,21 @@
-#include "lofmi/karnaugh_minimizer.h"
+#include "lofmi/karnaugh/minimization.h"
 
 #include <ranges>
 
 namespace Lofmi
 {
-
-std::vector<KarnaughMapArea> findAreas(const KarnaughMap& map)
+namespace Karnaugh
 {
-    auto areas = Minimize::findAllAreas(map);
-    areas = Minimize::removeOverlappingAreas(std::move(areas));
-    return *areas;
-}
-
-namespace Minimize
+namespace Minimization
 {
 // TODO: consider moving functions into class to have access to the map
+
+std::vector<MapArea> findAreas(const Map& map)
+{
+    auto areas = findAllAreas(map);
+    areas = removeOverlappingAreas(std::move(areas));
+    return *areas;
+}
 
 AreasPtr findAllAreas(const Map& map)
 {
@@ -187,7 +188,6 @@ std::pair<int, int> getXY(const Map& map)
     int x = y ? static_cast<int>(map.getMatrix()[0].size()) : 0;
     return { x, y };
 }
-
-} // namespace Minimize
-
+} // namespace Karnaugh
+} // namespace Minimization
 } // namespace Lofmi

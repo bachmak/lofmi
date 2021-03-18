@@ -1,32 +1,30 @@
 # pragma once
 
 #include "lofmi/common.h"
-#include "lofmi/karnaugh_map.h"
+#include "lofmi/karnaugh/map.h"
 
 namespace Lofmi
 {
-
-struct KarnaughMapPoint
+namespace Karnaugh
+{
+struct MapPoint
 {
     int x = 0;
     int y = 0;
 
-    bool operator==(const KarnaughMapPoint& kmp) const;
+    bool operator==(const MapPoint& kmp) const;
     
-    friend std::ostream& operator<<(
-        std::ostream& os, const KarnaughMapPoint& kmp
-    );
+    friend std::ostream& operator<<(std::ostream& os, const MapPoint& kmp);
 };
 
-class KarnaughMapArea
+class MapArea
 {
 public:
-    using Map = KarnaughMap;
-    using Point = KarnaughMapPoint;
-    using Area = KarnaughMapArea;
+    using Point = MapPoint;
+    using Area = MapArea;
 
 public:
-    KarnaughMapArea(
+    MapArea(
         const Map& map,
         Point left_top = { -1, -1 },
         Point right_bottom = { -1, -1 }
@@ -74,5 +72,5 @@ private:
     size_t map_height;
     size_t map_width;
 };
-    
+} // namespace Karnaugh    
 } // namespace Lofmi

@@ -1,8 +1,10 @@
-#include "lofmi/karnaugh_map.h"
+#include "lofmi/karnaugh/map.h"
 
 namespace Lofmi
 {
-KarnaughMap::KarnaughMap(const TruthTable& tt)
+namespace Karnaugh
+{
+Map::Map(const TruthTable& tt)
 {
     size_t arg_count = tt.getX().empty() ? 0 : tt.getX()[0].size();
 
@@ -19,12 +21,12 @@ KarnaughMap::KarnaughMap(const TruthTable& tt)
     map = TruthTableToKarnaughMap(tt);
 }
 
-const BoolMatrix& KarnaughMap::getMatrix() const
+const BoolMatrix& Map::getMatrix() const
 {
     return map;
 }
 
-std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
+std::ostream& operator<<(std::ostream& os, const Map& km)
 {
     if (km.rows.empty() || km.cols.empty())
     {
@@ -60,7 +62,7 @@ std::ostream& operator<<(std::ostream& os, const KarnaughMap& km)
     return os;
 }
 
-BoolMatrix KarnaughMap::TruthTableToKarnaughMap(const TruthTable& tt) const
+BoolMatrix Map::TruthTableToKarnaughMap(const TruthTable& tt) const
 {
     BoolMatrix result(rows.size(), std::vector<bool>(cols.size()));
 
@@ -83,4 +85,5 @@ BoolMatrix KarnaughMap::TruthTableToKarnaughMap(const TruthTable& tt) const
 
     return result;
 }
+} // namespace Karnaugh
 } // namespace Lofmi
