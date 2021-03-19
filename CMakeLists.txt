@@ -9,7 +9,7 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(SOURCE
     main.cpp
     ${SOURCE_DIR}/truth_table.cpp
-    ${SOURCE_DIR}/elem_oper.cpp
+    ${SOURCE_DIR}/normal_form_terms.cpp
     ${SOURCE_DIR}/normal_form.cpp
     ${SOURCE_DIR}/gray_code.cpp
     ${SOURCE_DIR}/karnaugh_map.cpp
