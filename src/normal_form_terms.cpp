@@ -13,7 +13,9 @@ std::ostream& operator<<(std::ostream& os, const FullFormTerm& t)
 
 std::string FullFormTerm::toString() const
 {
-    std::ostringstream os("(");
+    std::ostringstream os;
+
+    os << '(';
 
     for (size_t i = 0; i < bitset.size(); i++)
     {
@@ -23,6 +25,7 @@ std::string FullFormTerm::toString() const
     }
     os << ')';
 
+    auto result = os.str();
     return os.str();
 }
 
@@ -58,9 +61,9 @@ FullFormMaxterm::FullFormMaxterm(Bitset bits) :
     FullFormTerm(std::move(bits.flip()), " V ") {}
 
 MinFormMinterm::MinFormMinterm(Bitset bits, std::vector<int> nums) :
-    MinFormTerm(std::move(bits), " & ", std::move(bit_numbers)) {}
+    MinFormTerm(std::move(bits), " & ", std::move(nums)) {}
 
 MinFormMaxterm::MinFormMaxterm(Bitset bits, std::vector<int> nums) :
-    MinFormTerm(std::move(bits), " V ", std::move(bit_numbers)) {}
+    MinFormTerm(std::move(bits), " V ", std::move(nums)) {}
 
 } // namespace Lofmi

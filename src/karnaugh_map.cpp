@@ -26,7 +26,7 @@ const BoolMatrix& Map::getMatrix() const
     return map;
 }
 
-const Bitset& Map::getCode(int x, int y) const
+Bitset Map::getCode(int x, int y) const
 {
     if (x >= cols.size() || y >= rows.size() || x < 0 || y < 0)
     {

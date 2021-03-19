@@ -44,7 +44,6 @@ private:
     static void moveInsert(Areas src, Areas& dst);
 };
 
-class 
 } // namespace Minimize
 } // namespace Karnaugh
 } // namespace Lofmi

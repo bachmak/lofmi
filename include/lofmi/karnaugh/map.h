@@ -15,10 +15,11 @@ namespace Karnaugh
 */
 class Map
 {
+// TODO: add constructor by BoolMatrix (for testing)
 public:
     Map(const TruthTable& tt);
     const BoolMatrix& getMatrix() const;
-    const Bitset& getCode(int x, int y) const;
+    Bitset getCode(int x, int y) const;
     friend std::ostream& operator<<(std::ostream& os, const Map& km);
 
 private:

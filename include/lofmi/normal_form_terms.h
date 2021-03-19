@@ -11,17 +11,17 @@ public:
 
 protected:
     FullFormTerm(Bitset bitset, std::string divider);
-    Bitset bitset;
-    std::string divider;
     virtual std::string toString() const;
+    const std::string divider;
+    const Bitset bitset;
 };
 
 class MinFormTerm : public FullFormTerm
 {
 protected:
     MinFormTerm(Bitset bitset, std::string div, std::vector<int> bit_numbers);
-    std::vector<int> bit_numbers;
     std::string toString() const override;
+    const std::vector<int> bit_numbers;
 };
 
 class FullFormMinterm : public FullFormTerm
