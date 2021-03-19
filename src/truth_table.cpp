@@ -88,13 +88,13 @@ namespace Lofmi
         return table.at(x);
     }
 
-    NormalForm TruthTable::buildCNF() const
+    FullDisjunctiveNormalForm TruthTable::buildFDNF() const
     {
-        return NormalForm(x, y, OperType::Conjunctive);
+        return FullDisjunctiveNormalForm(x, y);
     }
 
-    NormalForm TruthTable::buildDNF() const
+    FullConjunctiveNormalForm TruthTable::buildFCNF() const
     {
-        return NormalForm(x, y, OperType::Disjunctive);
+        return FullConjunctiveNormalForm(x, y);
     }
 } // namespace Lofmi

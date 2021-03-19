@@ -19,8 +19,8 @@ public:
     const std::vector<Bitset>& getX() const;
     const Bitset& getY() const;
     bool getValue(const Bitset& x) const;
-    NormalForm buildDNF() const;
-    NormalForm buildCNF() const;
+    FullDisjunctiveNormalForm buildFDNF() const;
+    FullConjunctiveNormalForm buildFCNF() const;
 
 private:
     std::vector<Bitset> x;
