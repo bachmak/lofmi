@@ -8,87 +8,89 @@ namespace Karnaugh
 {
 namespace Minimization
 {
-// TODO: consider moving functions into class to have access to the map
+AreasFinder::AreasFinder(const Map& m) :
+    map{ m },
+    y_size{ static_cast<int>(m.getMatrix().size()) },
+    x_size{ 
+        m.getMatrix().size() ? static_cast<int>(m.getMatrix()[0].size()) : 0
+    } {}
 
-std::vector<MapArea> findAreas(const Map& map)
+Areas AreasFinder::findAreas() const
 {
-    auto areas = findAllAreas(map);
-    areas = removeOverlappingAreas(std::move(areas));
-    return *areas;
+    Areas areas = findAllPossibleAreas();
+    removeOverlappingAreas(areas);
+    return areas;
 }
 
-AreasPtr findAllAreas(const Map& map)
+Areas AreasFinder::findAllPossibleAreas() const
 {
-    AreasPtr result = std::make_unique<std::vector<Area>>();
-    auto [x_size, y_size] = getXY(map);
+    Areas result;
 
     for (int y_step = 0; y_step < y_size; y_step++)
     {
         for (int x_step = 0; x_step < x_size; x_step++)
         {
-            auto areas = findAreasFromPoint(map, Point{ x_step, y_step });
-            result = moveInsert(std::move(areas), std::move(result));
+            Areas areas = findAreasFromPoint(Point{ x_step, y_step });
+            moveInsert(std::move(areas), result);
         }
     }
          
     return std::move(result);
 }
 
-AreasPtr findAreasFromPoint(const Map& map, Point point)
+Areas AreasFinder::findAreasFromPoint(Point point) const
 {
-    AreasPtr result = std::make_unique<std::vector<Area>>();
+    Areas result;
 
-    auto [x_lim, y_lim] = getXY(map);
+    int x_lim = x_size;
+    int y_lim = y_size;
 
     for (int xy_step = 0; xy_step < std::min(x_lim, y_lim); xy_step++)
     {
-        result = moveInsert(
-            findAreasInDirectionAndUpdateLimit(
-                map, point, xy_step, x_lim, Direction::Right
-            ),
-            std::move(result)
+        Areas x_limited_areas = findAreasInDirectionAndUpdateLimit(
+            point, xy_step, x_lim, Direction::Right
         );
 
-        result = moveInsert(
-            findAreasInDirectionAndUpdateLimit(
-                map, point, xy_step, y_lim, Direction::Down
-            ),
-            std::move(result)
+        Areas y_limited_areas = findAreasInDirectionAndUpdateLimit(
+            point, xy_step, y_lim, Direction::Down
         );
+
+        moveInsert(std::move(x_limited_areas), result);
+        moveInsert(std::move(y_limited_areas), result);
     }
 
     return std::move(result);
 }
 
-AreasPtr findAreasInDirectionAndUpdateLimit(
-    const Map& map, Point point, int xy_step, int& lim, Direction dir
-)
+Areas AreasFinder::findAreasInDirectionAndUpdateLimit(
+    Point point, int xy_step, int& lim, Direction dir
+) const
 {
-    AreasPtr result = std::make_unique<std::vector<Area>>();
-    auto [x_size, y_size] = getXY(map);
+    Areas result;
 
     for (int step_count = 0; step_count < lim; step_count++)
     {
         int y_idx = point.y + xy_step;
         int x_idx = point.x + xy_step;
 
-        if (dir == Direction::Right)
+        switch (dir)
         {
+        case Direction::Right:
             x_idx += step_count;
-        }
-        else
-        {
+            break;
+        
+        case Direction::Down:
             y_idx += step_count;
         }
-        
+
         x_idx %= x_size;
         y_idx %= y_size;
 
-        if (!map.getMatrix()[y_idx][x_idx] && step_count == 0)
+        if (step_count == 0 && !map.getMatrix()[y_idx][x_idx])
         {
             lim = 0;
         }
-        else if (!map.getMatrix()[y_idx][x_idx] || step_count == lim - 1)
+        else if (step_count == lim - 1 || !map.getMatrix()[y_idx][x_idx])
         {
             lim = NextPowerOf2(xy_step + step_count);
 
@@ -107,16 +109,16 @@ AreasPtr findAreasInDirectionAndUpdateLimit(
                 area.setWidth(NextPowerOf2(xy_step + 1));
             }
 
-            result->push_back(area);
+            result.push_back(std::move(area));
         }
     }
     
     return std::move(result);
 }
 
-AreasPtr removeOverlappingAreas(AreasPtr areas)
+void AreasFinder::removeOverlappingAreas(Areas& areas)
 {
-    auto it = std::max_element(areas->begin(), areas->end());
+    auto it = std::max_element(areas.begin(), areas.end());
     int max_area_size = it->getAreaSize();
 
     for (int area_size = 1; area_size <= max_area_size; area_size *= 2)
@@ -126,22 +128,21 @@ AreasPtr removeOverlappingAreas(AreasPtr areas)
             { return a.getAreaSize() == area_size; }
         );
 
-        for (Area& ref_area : *areas | has_same_area_size)
+        for (Area& ref_area : areas | has_same_area_size)
         {
             resetIfCoveredByOther(ref_area, areas);
         }
     }
 
     auto non_zero_border = std::remove_if(
-        areas->begin(), areas->end(),
+        areas.begin(), areas.end(),
         [](const Area& a) { return a.getAreaSize() == 0; }
     );
 
-    areas->erase(non_zero_border, areas->end());
-    return std::move(areas);
+    areas.erase(non_zero_border, areas.end());
 }
 
-void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas)
+void AreasFinder::resetIfCoveredByOther(Area& ref_area, const Areas& areas)
 {
     for (int i = 0; i < ref_area.getAreaSize(); i++)
     {    
@@ -149,13 +150,13 @@ void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas)
             [&ref_area](const Area& a) { return &ref_area != &a; }
         );
 
-        auto non_zero_area_size = std::views::filter(
+        auto has_non_zero_area_size = std::views::filter(
             [](const Area& a) { return a.getAreaSize() != 0; }
         );
 
-        for (Area& area : *areas | 
+        for (const Area& area : areas | 
             differs_from_ref_area |
-            non_zero_area_size)
+            has_non_zero_area_size)
         {
             if (area.includesPoint(ref_area[i]))
             {
@@ -171,22 +172,13 @@ void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas)
     }
 }
 
-AreasPtr moveInsert(AreasPtr src, AreasPtr dst)
+void AreasFinder::moveInsert(Areas src, Areas& dst)
 {
-    dst->insert(
-        dst->end(),
-        std::make_move_iterator(src->begin()),
-        std::make_move_iterator(src->end())
+    dst.insert(
+        dst.end(),
+        std::make_move_iterator(src.begin()),
+        std::make_move_iterator(src.end())
     );
-
-    return std::move(dst);
-}
-
-std::pair<int, int> getXY(const Map& map)
-{
-    int y = static_cast<int>(map.getMatrix().size());
-    int x = y ? static_cast<int>(map.getMatrix()[0].size()) : 0;
-    return { x, y };
 }
 } // namespace Karnaugh
 } // namespace Minimization

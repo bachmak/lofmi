@@ -13,8 +13,8 @@ set(SOURCE
     ${SOURCE_DIR}/normal_form.cpp
     ${SOURCE_DIR}/gray_code.cpp
     ${SOURCE_DIR}/karnaugh_map.cpp
-    ${SOURCE_DIR}/karnaugh_minimization.cpp
     ${SOURCE_DIR}/karnaugh_area.cpp
+    ${SOURCE_DIR}/karnaugh_areas_finder.cpp
 )
 
 add_executable(main ${SOURCE})

@@ -9,48 +9,42 @@ namespace Lofmi
 {
 namespace Karnaugh
 {
-
 namespace Minimization
 {
-using Area = MapArea;
 using Point = MapPoint;
-using AreasPtr = std::unique_ptr<std::vector<Area>>;
+using Area = MapArea;
+using Areas = std::vector<Area>;
 
-// TODO: remove extra operators for debug   
-
-std::vector<MapArea> findAreas(const Map& map);
-
-inline std::ostream& operator<<(std::ostream& os, const AreasPtr& areas)
+class AreasFinder
 {
-    for (const auto& area : *areas)
+public:
+    AreasFinder(const Map& m);
+    Areas findAreas() const;
+
+private:
+    const Map& map;
+    const int x_size;
+    const int y_size;
+
+private:
+    enum class Direction
     {
-        os << area << std::endl;
-    }
+        Right, Down
+    };
 
-    return os;
-}
+private:    
+    Areas findAllPossibleAreas() const;
+    Areas findAreasFromPoint(Point point) const;
+    Areas findAreasInDirectionAndUpdateLimit(
+        Point point, int xy_step, int& limit, Direction dir
+    ) const;
 
-enum class Direction
-{
-    Right, Down
+    static void removeOverlappingAreas(Areas& areas);
+    static void resetIfCoveredByOther(Area& ref_area, const Areas& areas);
+    static void moveInsert(Areas src, Areas& dst);
 };
 
-AreasPtr findAllAreas(const Map& map);
-
-AreasPtr removeOverlappingAreas(AreasPtr areas);
-
-AreasPtr findAreasFromPoint(const Map& map, Point point);
-
-AreasPtr findAreasInDirectionAndUpdateLimit(
-    const Map& map, Point point, int xy_step, int& limit, Direction dir
-);
-
-void resetIfCoveredByOther(Area& ref_area, const AreasPtr& areas);
-
-AreasPtr moveInsert(AreasPtr src, AreasPtr dst);
-
-std::pair<int, int> getXY(const Map& map);
-
-} // namespace Karnaugh
+class 
 } // namespace Minimize
+} // namespace Karnaugh
 } // namespace Lofmi
